@@ -1,0 +1,14 @@
+<!--
+  @description       : A Lightning Web Component to use data tree
+  @author            : Ashish Sharma
+-->
+<template>
+    <c-data-tree
+        tree-items={treeData}
+        hide-checkbox=false
+        expand=false
+        onselectunselect={handleSelectUnselect}
+        onnodeclick={handleNodeClick}
+        onexpandnode={handleExpandNode}>
+    </c-data-tree>
+</template>

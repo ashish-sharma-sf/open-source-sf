@@ -1,0 +1,15 @@
+.hideBtn {
+    visibility: hidden;
+}
+
+.margin-nested {
+    margin: 75px;
+}
+
+.margin-nested-5th {
+    margin: 95px;
+}
+
+.margin-nested-nth {
+    margin: 120px;
+}

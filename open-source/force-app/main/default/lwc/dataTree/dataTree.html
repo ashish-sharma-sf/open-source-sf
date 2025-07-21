@@ -1,0 +1,71 @@
+<!--
+  @description       : A Lightning Web Component to display a hierarchical tree structure
+  @author            : Ashish Sharma
+-->
+<template>
+    <ul>
+        <template for:each={treeItems} for:item="node">
+            <li key={node.id} class={node.cssClass}>
+                
+                <!-- Checkbox for selecting/deselecting the node -->
+                <template lwc:if={showCheckbox}>
+                    <lightning-input
+                        name={node.id}
+                        checked={node.isSelected}
+                        class="slds-p-top--small"
+                        type="checkbox"
+                        onchange={handleCheckboxChange}
+                        style="display: inline-block">
+                    </lightning-input>
+                </template>
+
+                <!-- Container for expand/collapse button and node label -->
+                <span class={node.containerClass}>
+                    <!-- Button to toggle expand/collapse of child nodes -->
+                    <button class={node.buttonClass}
+                            name={node.id}
+                            tabindex="-1"
+                            onclick={handleToggleNodeExpandCollapse}>
+                        <svg class="slds-button__icon slds-button__icon_small">
+                            <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                        </svg>
+                    </button>
+                    
+                    <!-- Node content with special attributes (e.g., icons, URLs) -->
+                    <template lwc:if={node.typeAttributes}>
+                        <!-- Icon associated with the node -->
+                        <template lwc:if={node.typeAttributes.icon}>
+                            <lightning-icon icon-name={node.typeAttributes.icon} size={node.typeAttributes.iconSize}
+                                class={node.typeAttributes.iconClass}>
+                            </lightning-icon>&nbsp;
+                        </template>
+                        <!-- Node label rendered as a clickable URL button -->
+                        <template lwc:if={node.isUrl}>
+                            <button onclick={handleNodeLabelClick} class="slds-button slds-text-link" id={node.id}
+                                value={node.id}>{node.nodeName}</button>
+                        </template>
+                    </template>
+                    
+                    <!-- Plain text node label when no special attributes are present -->
+                    <template lwc:else>
+                        <span>{node.nodeName}</span>
+                    </template>
+                </span>
+
+                <!-- Recursive rendering of child nodes, initially hidden -->
+                <ul class="slds-hide" data-id={node.id}>
+                    <template lwc:if={node.showChildNodes}>
+                        <c-gra_nv_data-tree
+                            tree-items={node.children}
+                            margin-class={nextMarginClass}
+                            onselectunselect={handleChildSelectionEvent}
+                            onexpandnode={handleExpandNode}
+                            expand={expand}
+                            hide-checkbox={hideCheckbox}>
+                        </c-gra_nv_data-tree>
+                    </template>
+                </ul>
+            </li>
+        </template>
+    </ul>
+</template>
