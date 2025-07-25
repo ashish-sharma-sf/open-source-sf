@@ -1,0 +1,20 @@
+<!--
+  @description       : Demo component for recordListCard
+  @author            : Ashish Sharma
+-->
+<template>
+    <c-record-list-card
+        icon-name="standard:account"
+        header-label="Accounts"
+        records={demoRecords}
+        columns={demoColumns}
+        custom-actions={demoActions}
+        show-row-numbers
+        disable-column-resize="false"
+        show-default-actions
+        sorted-by="Name"
+        onactionclick={handleCardAction}
+        onrowaction={handleRowAction}
+        onrefresh={handleRefresh}>
+    </c-record-list-card>
+</template>

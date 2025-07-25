@@ -1,0 +1,104 @@
+<!--
+  @description       : Custom Lightning Web Component for displaying a list of records in a card format.
+  @author            : Ashish Sharma
+-->
+<template>
+    <div class="card-style">
+        <article class="slds-card">
+            <!-- Header -->
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <!-- Title Section -->
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name={iconName} size="small" class={computedIconClass}></lightning-icon>
+                            </div>
+                            <div class="slds-media__body slds-align-middle">
+                                <h1 class="slds-card__header-title slds-text-color_default slds-truncate slds-var-p-right_xx-small">
+                                    {headerLabel}
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions Section -->
+                    <div class="slds-page-header__col-actions" slot="actions">
+                        <div class="slds-page-header__controls">
+                            <slot name="customActions">
+                                <template for:each={customActions} for:item="action">
+                                    <lightning-button
+                                        key={action.name}
+                                        label={action.label}
+                                        title={action.name}
+                                        name={action.name}
+                                        icon-name={action.iconName}
+                                        class="slds-button"
+                                        onclick={handleActionClick}>
+                                    </lightning-button>
+                                </template>
+
+                                <template lwc:if={showDefaultActions}>
+                                    <lightning-button-menu
+                                        alternative-text="Show menu"
+                                        variant="border-filled"
+                                        icon-name="utility:settings">
+                                        <lightning-menu-item
+                                            label="Reset Column Widths"
+                                            value="resetColumns"
+                                            onclick={resetTableColumns}
+                                            onkeypress={handleMenuKeyPress}>
+                                        </lightning-menu-item>
+                                    </lightning-button-menu>
+
+                                    <lightning-button-icon
+                                        variant="border-filled"
+                                        icon-name="utility:refresh"
+                                        alternative-text="Refresh"
+                                        class="slds-m-left_xx-small"
+                                        title="Refresh"
+                                        onclick={handleRefresh}>
+                                    </lightning-button-icon>
+                                </template>
+                            </slot>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta Section -->
+                <div class={headerRowClass}>
+                    <div class="slds-page-header__col-meta">
+                        <p class="slds-text-body_small slds-text-color_default">
+                            <span>
+                                {recordCount} items
+                                <template lwc:if={showSortedText}>• {showSortedText}</template>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="slds-border_top">
+                <template lwc:if={isTableVisible}>
+                    <lightning-datatable
+                        class="slds-text-color_default"
+                        key-field="Id"
+                        data={records}
+                        columns={columns}
+                        hide-checkbox-column
+                        onrowaction={handleRowAction}
+                        show-row-number-column={showRowNumbers}
+                        resize-column-disabled={disableColumnResize}>
+                    </lightning-datatable>
+                </template>
+
+                <template lwc:if={showNoData}>
+                    <div class="slds-p-around_medium slds-text-align_center empty-card">
+                        <p>{emptyStateMessage}.</p>
+                    </div>
+                </template>
+            </div>
+        </article>
+    </div>
+</template>
